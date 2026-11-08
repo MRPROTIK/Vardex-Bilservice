@@ -59,7 +59,7 @@ export default function BookingPage() {
         service: 'Premium-rekond', // Default or from context
         booking_date: selectedDate,
         booking_time: selectedTime,
-        status: 'pending'
+        status: 'confirmed'
       }
     ])
 

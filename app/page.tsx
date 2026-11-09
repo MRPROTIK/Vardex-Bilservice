@@ -1,437 +1,257 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowRight,
-  BadgeCheck,
+  CalendarCheck,
   CarFront,
-  CheckCircle2,
-  Clock3,
-  Gauge,
+  Disc3,
+  Droplets,
+  Mail,
   MapPin,
-  PhoneCall,
-  ShieldCheck,
-  Sparkles,
-  Star,
+  Phone,
+  ScanSearch,
+  Send,
   Wrench,
   type LucideIcon,
 } from "lucide-react";
+import { site } from "@/content/site";
 
-type Feature = {
-  icon: LucideIcon;
-  title: string;
-  description: string;
+const serviceIcons: Record<(typeof site.services)[number]["icon"], LucideIcon> = {
+  wrench: Wrench,
+  brakes: Disc3,
+  oil: Droplets,
+  diagnostics: ScanSearch,
 };
 
-const stats = [
-  { value: "12k+", label: "Vehicles serviced" },
-  { value: "4.9/5", label: "Customer rating" },
-  { value: "96%", label: "Repeat clients" },
-  { value: "48h", label: "Average turnaround" },
-];
+const pageTitle = `${site.brandName} – Bilverkstad i ${site.city}`;
 
-const features: Feature[] = [
-  {
-    icon: Wrench,
-    title: "Full Service & Repair",
-    description:
-      "Diagnostics, scheduled maintenance, brakes, suspension, and engine work done with precision.",
+export const metadata: Metadata = {
+  title: pageTitle,
+  description: site.description,
+  robots: {
+    index: site.settings.ALLOW_INDEXING,
+    follow: site.settings.ALLOW_INDEXING,
   },
-  {
-    icon: ShieldCheck,
-    title: "Trusted Workshop Quality",
-    description:
-      "Certified technicians and transparent service reports keep your vehicle in peak condition.",
-  }, {
-    icon: Gauge,
-    title: "Performance Upgrades",
-    description:
-      "From tuning to inspections, we optimize reliability, efficiency, and driving confidence.",
-  },
-];
+};
 
-const services = [
-  "Engine diagnostics",
-  "Brake & suspension",
-  "Oil & filter service",
-  "Air conditioning",
-  "Tire & alignment",
-  "Bodywork & detailing",
-];
+function isPlaceholder(value: string) {
+  return value.startsWith("[") && value.endsWith("]");
+}
 
-const process = [
-  {
-    step: "01",
-    title: "Book Your Service",
-    description: "Choose your preferred time and describe the maintenance or issue you need resolved.",
-  },
-  {
-    step: "02",
-    title: "Precision Inspection",
-    description: "We assess your vehicle, explain the condition, and provide a transparent recommendation.",
-  },
-  {
-    step: "03",
-    title: "Drive Away Confident",
-    description: "Receive expert workmanship, quality checks, and a smooth, reliable return to the road.",
-  },
-];
-
-const testimonials = [
-  {
-    quote:
-      "Fast, professional, and brutally honest. Vardexo fixed our service warning and explained everything clearly.",
-    name: "Lina M.",
-    role: "BMW owner",
-  },
-  {
-    quote:
-      "The workshop feels premium and the attention to detail is obvious. My car runs smoother than ever.",
-    name: "Oskar N.",
-    role: "Volvo owner",
-  },
-];
+function getPhoneHref() {
+  return isPlaceholder(site.phone)
+    ? "#contact"
+    : `tel:${site.phone.replace(/[^\d+]/g, "")}`;
+}
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[#07111f] text-slate-100">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <header className="sticky top-0 z-50 border-b border-white/10 bg-[#07111f]/80 backdrop-blur-xl">
-          <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-            <div className="flex items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-400 via-orange-500 to-rose-500 shadow-lg shadow-amber-500/30">
-                <CarFront className="h-5 w-5 text-slate-950" />
-              </div>
-              <div>
-                <p className="text-lg font-semibold tracking-[0.14em] text-white">VARDEXO</p>
-                <p className="text-[10px] uppercase tracking-[0.32em] text-slate-400">Bilservice</p>
-              </div>
-            </div>
+    <main className="min-h-screen overflow-hidden bg-background text-foreground">
+      {site.settings.SHOW_DEMO_BANNER && (
+        <p className="bg-gold px-4 py-2 text-center text-sm font-medium text-background">
+          Demoläge – kontaktuppgifterna kan vara platshållare.
+        </p>
+      )}
 
-            <nav className="hidden items-center gap-8 text-sm text-slate-300 md:flex">
-              <a href="#services" className="transition hover:text-white">Tjänster</a>
-              <a href="#why-us" className="transition hover:text-white">Varför oss</a>
-              <a href="#process" className="transition hover:text-white">Process</a>
-              <a href="#reviews" className="transition hover:text-white">Recensioner</a>
-            </nav>
-
-            <div className="flex items-center gap-3">
-              <Link
-                href="/boka"
-                className="hidden rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-white transition hover:border-amber-400/60 hover:bg-amber-400/10 sm:inline-flex"
-              >
-                Boka tid
+      <section className="relative isolate border-b border-white/10">
+        <div
+          className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_76%_38%,rgba(201,162,75,0.13),transparent_38%),linear-gradient(135deg,#141414_0%,#0A0A0A_65%)]"
+          aria-hidden="true"
+        />
+        <div className="mx-auto max-w-6xl px-6 py-20 sm:py-28 lg:py-36">
+          <div className="fade-in max-w-3xl">
+            {site.openingStatus === "Öppnar snart" && (
+              <p className="mb-6 inline-flex items-center gap-2 rounded-full border border-gold/40 bg-gold/10 px-4 py-2 text-sm font-medium text-gold-light">
+                <span className="h-2 w-2 rounded-full bg-gold" aria-hidden="true" />
+                {site.openingStatus}
+              </p>
+            )}
+            <h1 className="max-w-3xl text-5xl leading-[1.08] tracking-tight sm:text-6xl lg:text-7xl">
+              Bilservice med en tydlig bokningsprocess.
+            </h1>
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-muted sm:text-xl">
+              {site.home.heroDescription}
+            </p>
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+              <Link href="/boka" className="btn-gold">
+                Begär en bokning
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
-              <a
-                href="tel:+46701234567"
-                className="inline-flex items-center gap-2 rounded-full bg-amber-400 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-amber-300"
-              >
-                <PhoneCall className="h-4 w-4" />
+              <a href={getPhoneHref()} className="btn-outline">
+                <Phone className="h-4 w-4" aria-hidden="true" />
                 Ring oss
               </a>
             </div>
           </div>
-        </header>
+        </div>
+      </section>
 
-        <section className="relative overflow-hidden py-16 sm:py-20 lg:py-28">
-          <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_right,_rgba(251,191,36,0.18),transparent_20%),radial-gradient(circle_at_bottom_left,_rgba(59,130,246,0.18),transparent_25%)]" />
+      <div className="mx-auto max-w-6xl px-6">
+        <section id="services" className="scroll-mt-24 py-16 sm:py-20">
+          <div className="fade-in mb-9 max-w-2xl">
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold-light">
+              Våra tjänster
+            </p>
+            <h2 className="mt-3 text-3xl sm:text-4xl">Tjänster för din bil</h2>
+            <p className="mt-4 leading-7 text-muted">{site.home.servicesDescription}</p>
+          </div>
+          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {site.services.map((service, index) => {
+              const Icon = serviceIcons[service.icon];
 
-          <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
-            <div>
-              <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-amber-400/30 bg-amber-400/10 px-3 py-1.5 text-sm text-amber-200">
-                <Sparkles className="h-4 w-4" />
-                Premium bilservice för varje resa
-              </div>
-
-              <h1 className="max-w-xl text-4xl font-black tracking-tight text-white sm:text-5xl lg:text-6xl">
-                Din bil, <span className="text-amber-400">vår expertis.</span>
-              </h1>
-
-              <p className="mt-6 max-w-xl text-lg leading-8 text-slate-300">
-                Från service och reparationer till förebyggande underhåll — vi håller din bil i toppform med högkvalitativt arbete, smarta lösningar och en kundupplevelse i toppklass.
-              </p>
-
-              <div className="mt-8 flex flex-col gap-4 sm:flex-row">
-                <Link
-                  href="/boka"
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-amber-400 px-6 py-3.5 text-base font-semibold text-slate-950 transition hover:bg-amber-300"
+              return (
+                <li
+                  key={service.slug}
+                  className="fade-in rounded-2xl border border-white/10 bg-surface p-6 transition-colors hover:border-gold/50"
+                  style={{ animationDelay: `${index * 80}ms` }}
                 >
-                  Boka service
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-                <a
-                  href="#services"
-                  className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-6 py-3.5 text-base font-semibold text-white transition hover:border-white/30 hover:bg-white/10"
-                >
-                  Se tjänster
-                </a>
-              </div>
-
-              <div className="mt-10 flex flex-wrap gap-6 text-sm text-slate-300">
-                {[
-                  "Kvalitetsgaranti",
-                  "Snabb respons",
-                  "Transparent prissättning",
-                ].map((item) => (
-                  <div key={item} className="flex items-center gap-2">
-                    <BadgeCheck className="h-4 w-4 text-amber-400" />
-                    {item}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="relative">
-              <div className="absolute -left-6 top-8 h-24 w-24 rounded-full bg-amber-400/20 blur-3xl" />
-              <div className="absolute -right-8 bottom-6 h-28 w-28 rounded-full bg-blue-500/20 blur-3xl" />
-
-              <div className="relative rounded-[32px] border border-white/10 bg-gradient-to-br from-slate-900 to-slate-800 p-5 shadow-2xl shadow-slate-950/50">
-                <div className="rounded-[24px] border border-white/10 bg-slate-950/80 p-5">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-xs uppercase tracking-[0.28em] text-slate-400">Service status</p>
-                      <h2 className="mt-2 text-2xl font-bold text-white">Bil klar för nästa resa</h2>
-                    </div>
-                    <div className="rounded-full bg-emerald-500/15 p-2 text-emerald-400">
-                      <CheckCircle2 className="h-6 w-6" />
-                    </div>
-                  </div>
-
-                  <div className="mt-6 grid gap-4 sm:grid-cols-2">
-                    <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                      <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Nästa besiktning</p>
-                      <p className="mt-3 text-2xl font-bold text-white">14 apr</p>
-                    </div>
-                    <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                      <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Köra säkert</p>
-                      <p className="mt-3 text-2xl font-bold text-white">97%</p>
-                    </div>
-                  </div>
-
-                  <div className="mt-6 rounded-2xl border border-amber-400/30 bg-amber-400/10 p-4">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-amber-100">Servicecheck</span>
-                      <span className="text-sm font-semibold text-amber-300">På gång</span>
-                    </div>
-                    <div className="mt-4 h-2.5 overflow-hidden rounded-full bg-slate-800">
-                      <div className="h-full w-[78%] rounded-full bg-gradient-to-r from-amber-400 to-orange-500" />
-                    </div>
-                  </div>
-
-                  <div className="mt-6 space-y-3">
-                    {[
-                      "Oljebyte genomfört",
-                      "Bromsar kontrollade",
-                      "Däckens skick verifierat",
-                    ].map((item) => (
-                      <div key={item} className="flex items-center gap-3 rounded-xl bg-slate-900/80 p-3 text-slate-200">
-                        <div className="rounded-full bg-emerald-500/15 p-1 text-emerald-400">
-                          <CheckCircle2 className="h-4 w-4" />
-                        </div>
-                        <span>{item}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="pb-12">
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {stats.map((stat) => (
-              <div key={stat.label} className="rounded-2xl border border-white/10 bg-white/5 p-5 text-center">
-                <p className="text-3xl font-black text-white">{stat.value}</p>
-                <p className="mt-2 text-sm text-slate-300">{stat.label}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section id="services" className="py-16">
-          <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.28em] text-amber-300">Våra tjänster</p>
-              <h2 className="mt-3 text-3xl font-bold text-white sm:text-4xl">Helhetslösningar för din bil</h2>
-            </div>
-            <Link href="/boka" className="inline-flex items-center gap-2 text-sm font-semibold text-amber-300 transition hover:text-amber-200">
-              Schemalägg service <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-
-          <div className="grid gap-5 md:grid-cols-3">
-            {features.map(({ icon: Icon, title, description }) => (
-              <div key={title} className="rounded-[28px] border border-white/10 bg-gradient-to-b from-slate-900 to-slate-950 p-6 shadow-lg shadow-slate-950/40">
-                <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-400/12 text-amber-300 ring-1 ring-amber-400/30">
-                  <Icon className="h-6 w-6" />
-                </div>
-                <h3 className="text-xl font-semibold text-white">{title}</h3>
-                <p className="mt-3 text-sm leading-7 text-slate-300">{description}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-10 rounded-[28px] border border-white/10 bg-slate-900/80 p-6 sm:p-8">
-            <div className="grid gap-4 md:grid-cols-3">
-              {services.map((service) => (
-                <div key={service} className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-slate-200">
-                  <CheckCircle2 className="h-5 w-5 text-amber-400" />
-                  {service}
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section id="why-us" className="py-16">
-          <div className="grid items-center gap-8 lg:grid-cols-[0.95fr_1.05fr]">
-            <div className="rounded-[32px] border border-white/10 bg-gradient-to-br from-slate-900 to-slate-950 p-6 sm:p-8">
-              <p className="text-sm font-semibold uppercase tracking-[0.28em] text-amber-300">Varför Vardexo</p>
-              <h2 className="mt-3 text-3xl font-bold text-white sm:text-4xl">Service som ger trygghet och resultat</h2>
-
-              <div className="mt-8 space-y-5">
-                {[
-                  "Erfarna mekaniker med fokus på kvalitet och precision",
-                  "Transparent kommunikation innan, under och efter arbetet",
-                  "Modern utrustning för diagnos och förebyggande underhåll",
-                ].map((item) => (
-                  <div key={item} className="flex items-start gap-3 rounded-2xl border border-white/10 bg-white/5 p-3">
-                    <div className="mt-0.5 rounded-full bg-amber-400/12 p-1 text-amber-300">
-                      <CheckCircle2 className="h-4 w-4" />
-                    </div>
-                    <p className="text-slate-200">{item}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="relative">
-              <div className="absolute -left-4 top-10 h-28 w-28 rounded-full bg-amber-400/15 blur-3xl" />
-              <div className="absolute -right-4 bottom-10 h-28 w-28 rounded-full bg-blue-500/15 blur-3xl" />
-
-              <div className="relative rounded-[32px] border border-white/10 bg-slate-900/80 p-6 sm:p-8">
-                <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <div>
-                    <p className="text-xs uppercase tracking-[0.22em] text-slate-400">Kundnöjdhet</p>
-                    <p className="mt-2 text-3xl font-black text-white">4.9/5</p>
-                  </div>
-                  <div className="flex gap-1 text-amber-400">
-                    {Array.from({ length: 5 }).map((_, index) => (
-                      <Star key={index} className="h-5 w-5 fill-current" />
-                    ))}
-                  </div>
-                </div>
-
-                <div className="mt-6 grid gap-4 sm:grid-cols-2">
-                  <div className="rounded-2xl border border-white/10 bg-gradient-to-br from-slate-800 to-slate-900 p-5">
-                    <Clock3 className="h-8 w-8 text-amber-400" />
-                    <p className="mt-4 text-2xl font-bold text-white">48h</p>
-                    <p className="mt-1 text-sm text-slate-300">Snabb återkomst</p>
-                  </div>
-                  <div className="rounded-2xl border border-white/10 bg-gradient-to-br from-slate-800 to-slate-900 p-5">
-                    <Gauge className="h-8 w-8 text-amber-400" />
-                    <p className="mt-4 text-2xl font-bold text-white">100%</p>
-                    <p className="mt-1 text-sm text-slate-300">Kontrollerad kvalitet</p>
-                  </div>
-                </div>
-
-                <div className="mt-6 rounded-2xl border border-amber-400/25 bg-amber-400/10 p-4 text-sm leading-7 text-slate-200">
-                  <div className="flex items-center gap-2 text-amber-200">
-                    <MapPin className="h-4 w-4" />
-                    Centralt beläget i Skövde
-                  </div>
-                  <p className="mt-3">
-                    Flexibla tider, noggrann kvalitet och personligt bemötande för både privatpersoner och företag.
+                  <Icon className="h-7 w-7 text-gold" aria-hidden="true" />
+                  <h3 className="mt-5 text-xl">{service.name}</h3>
+                  <p className="mt-2 min-h-14 text-sm leading-6 text-muted">
+                    {service.shortDescription}
                   </p>
-                </div>
-              </div>
-            </div>
-          </div>
+                  <Link
+                    href={`/tjanster/${service.slug}`}
+                    className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-gold-light hover:text-white"
+                  >
+                    Läs mer
+                    <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
         </section>
 
-        <section id="process" className="py-16">
-          <div className="mb-10 text-center">
-            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-amber-300">Så fungerar det</p>
-            <h2 className="mt-3 text-3xl font-bold text-white sm:text-4xl">En enkel process, ett starkt resultat</h2>
+        <section className="border-t border-white/10 py-16 sm:py-20">
+          <div className="fade-in mx-auto max-w-3xl text-center">
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold-light">
+              Nästa steg
+            </p>
+            <h2 className="mt-3 text-3xl sm:text-4xl">Så fungerar det</h2>
+            <p className="mt-4 leading-7 text-muted">{site.home.processDescription}</p>
           </div>
+          <ol className="mt-10 grid gap-4 md:grid-cols-3">
+            {site.home.steps.map((step, index) => {
+              const icons = [Send, CalendarCheck, CarFront];
+              const Icon = icons[index];
 
-          <div className="grid gap-5 md:grid-cols-3">
-            {process.map(({ step, title, description }) => (
-              <div key={step} className="rounded-[28px] border border-white/10 bg-slate-900/80 p-6">
-                <span className="text-sm font-semibold uppercase tracking-[0.24em] text-amber-300">{step}</span>
-                <h3 className="mt-4 text-xl font-semibold text-white">{title}</h3>
-                <p className="mt-3 text-sm leading-7 text-slate-300">{description}</p>
-              </div>
+              return (
+                <li
+                  key={step.title}
+                  className="fade-in rounded-2xl border border-white/10 bg-surface p-6"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  <div className="flex items-center gap-4">
+                    <span className="flex h-11 w-11 items-center justify-center rounded-full border border-gold/40 bg-gold/10 text-gold-light">
+                      <Icon className="h-5 w-5" aria-hidden="true" />
+                    </span>
+                    <span className="text-sm font-semibold tracking-[0.14em] text-gold">
+                      0{index + 1}
+                    </span>
+                  </div>
+                  <h3 className="mt-5 text-xl">{step.title}</h3>
+                  <p className="mt-2 leading-7 text-muted">{step.description}</p>
+                </li>
+              );
+            })}
+          </ol>
+          <p className="mx-auto mt-6 max-w-3xl rounded-xl border border-gold/30 bg-gold/5 px-5 py-4 text-center text-sm leading-6 text-gold-light">
+            {site.home.bookingNote}
+          </p>
+        </section>
+
+        <section id="about" className="scroll-mt-24 border-t border-white/10 py-16 sm:py-20">
+          <div className="fade-in mx-auto max-w-3xl text-center">
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold-light">
+              Om verkstaden
+            </p>
+            <h2 className="mt-3 text-3xl sm:text-4xl">Varför {site.brandName}?</h2>
+            <p className="mt-4 leading-7 text-muted">{site.home.whyDescription}</p>
+          </div>
+          <ul className="mt-9 grid gap-4 md:grid-cols-3">
+            {site.home.whyUs.map((reason, index) => (
+              <li
+                key={reason.title}
+                className="fade-in rounded-2xl border border-white/10 bg-surface p-6"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                <span className="text-sm font-semibold tracking-[0.14em] text-gold">
+                  0{index + 1}
+                </span>
+                <h3 className="mt-4 text-xl">{reason.title}</h3>
+                <p className="mt-2 leading-7 text-muted">{reason.description}</p>
+              </li>
             ))}
-          </div>
+          </ul>
         </section>
 
-        <section id="reviews" className="py-16">
-          <div className="mb-10 flex items-end justify-between gap-4">
+        <section id="contact" className="scroll-mt-24 border-t border-white/10 py-16 sm:py-20">
+          <div className="fade-in grid gap-8 rounded-3xl border border-gold/30 bg-[linear-gradient(120deg,rgba(201,162,75,0.09),#141414_48%)] p-6 sm:p-9 lg:grid-cols-[1fr_auto] lg:items-center">
             <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.28em] text-amber-300">Recensioner</p>
-              <h2 className="mt-3 text-3xl font-bold text-white sm:text-4xl">Det säger våra kunder</h2>
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold-light">
+                Kontakta oss
+              </p>
+              <h2 className="mt-3 text-3xl sm:text-4xl">{site.home.contactTitle}</h2>
+              <p className="mt-3 max-w-xl leading-7 text-muted">
+                {site.home.contactDescription}
+              </p>
+              <dl className="mt-6 grid gap-4 text-sm text-muted sm:grid-cols-2">
+                <div className="flex items-start gap-3">
+                  <Phone className="mt-0.5 h-4 w-4 shrink-0 text-gold" aria-hidden="true" />
+                  <div>
+                    <dt className="sr-only">Telefon</dt>
+                    <dd>
+                      {isPlaceholder(site.phone) ? (
+                        site.phone
+                      ) : (
+                        <a href={getPhoneHref()} className="hover:text-gold-light">
+                          {site.phone}
+                        </a>
+                      )}
+                    </dd>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Mail className="mt-0.5 h-4 w-4 shrink-0 text-gold" aria-hidden="true" />
+                  <div>
+                    <dt className="sr-only">E-post</dt>
+                    <dd>
+                      {isPlaceholder(site.email) ? (
+                        site.email
+                      ) : (
+                        <a href={`mailto:${site.email}`} className="hover:text-gold-light">
+                          {site.email}
+                        </a>
+                      )}
+                    </dd>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 sm:col-span-2">
+                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-gold" aria-hidden="true" />
+                  <div>
+                    <dt className="sr-only">Adress</dt>
+                    <dd>
+                      {isPlaceholder(site.address)
+                        ? site.openingStatus
+                        : `${site.address}, ${site.city}`}
+                    </dd>
+                  </div>
+                </div>
+              </dl>
             </div>
-          </div>
-
-          <div className="grid gap-5 lg:grid-cols-2">
-            {testimonials.map(({ quote, name, role }) => (
-              <div key={name} className="rounded-[28px] border border-white/10 bg-gradient-to-br from-slate-900 to-slate-950 p-6">
-                <div className="mb-5 flex gap-1 text-amber-400">
-                  {Array.from({ length: 5 }).map((_, index) => (
-                    <Star key={index} className="h-5 w-5 fill-current" />
-                  ))}
-                </div>
-                <p className="text-lg leading-8 text-slate-200">“{quote}”</p>
-                <div className="mt-6 border-t border-white/10 pt-4">
-                  <p className="font-semibold text-white">{name}</p>
-                  <p className="text-sm text-slate-400">{role}</p>
-                </div>
-              </div>
-            ))}
+            <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
+              <Link href="/boka" className="btn-gold">
+                Begär en bokning
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+              <a href={getPhoneHref()} className="btn-outline">
+                <Phone className="h-4 w-4" aria-hidden="true" />
+                Ring oss
+              </a>
+            </div>
           </div>
         </section>
-
-        <section id="contact" className="py-16">
-          <div className="rounded-[32px] border border-amber-400/25 bg-gradient-to-r from-amber-400/15 via-slate-900 to-slate-900 p-6 sm:p-8 lg:p-10">
-            <div className="grid items-center gap-6 lg:grid-cols-[1fr_auto]">
-              <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.28em] text-amber-300">Boka idag</p>
-                <h2 className="mt-3 text-3xl font-bold text-white sm:text-4xl">Låt oss ta hand om din bil</h2>
-                <p className="mt-3 max-w-xl text-slate-300">
-                  Kontakta oss för ett gratis samtal om din bil, ditt behov och den bästa lösningen för dig.
-                </p>
-              </div>
-
-              <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
-                <a
-                  href="tel:+46701234567"
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-amber-400 px-5 py-3 font-semibold text-slate-950 transition hover:bg-amber-300"
-                >
-                  <PhoneCall className="h-4 w-4" />
-                  +46 70 123 45 67
-                </a>
-                <a
-                  href="mailto:info@vardexo.se"
-                  className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-3 font-semibold text-white transition hover:border-white/30"
-                >
-                  info@vardexo.se
-                </a>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <footer className="border-t border-white/10 py-8 text-sm text-slate-400">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400 via-orange-500 to-rose-500">
-                <CarFront className="h-4 w-4 text-slate-950" />
-              </div>
-              <span className="font-semibold tracking-[0.14em] text-white">VARDEXO</span>
-            </div>
-            <p>© 2026 Vardexo Bilservice. Alla rättigheter förbehållna.</p>
-          </div>
-        </footer>
       </div>
     </main>
   );

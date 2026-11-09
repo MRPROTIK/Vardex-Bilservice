@@ -1,9 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Calendar, Clock, User, Phone, Car, ChevronRight, CheckCircle2, ArrowLeft } from 'lucide-react'
+import { Clock, User, Phone, Car, ChevronRight, CheckCircle2, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import { createClient } from '@/utils/supabase/client'
+import { site } from '@/content/site'
 
 const TIMES = ['08:00', '10:00', '13:00', '15:00', '16:30']
 const DATES = [
@@ -15,7 +16,9 @@ const DATES = [
 ]
 
 export default function BookingPage() {
-  const supabase = createClient()
+  const [supabase] = useState(() =>
+    typeof window === 'undefined' ? null : createClient()
+  )
   const [selectedDate, setSelectedDate] = useState('2024-10-14')
   const [selectedTime, setSelectedTime] = useState('')
   const [bookedSlots, setBookedSlots] = useState<string[]>([])
@@ -28,8 +31,11 @@ export default function BookingPage() {
   const [plate, setPlate] = useState('')
 
   useEffect(() => {
+    if (!supabase) return
+    const client = supabase
+
     async function fetchAvailability() {
-      const { data, error } = await supabase
+      const { data, error } = await client
         .from('booked_slots')
         .select('booking_time')
         .eq('booking_date', selectedDate)
@@ -48,7 +54,7 @@ export default function BookingPage() {
 
   const handleBooking = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!selectedTime || !name || !phone || !plate) return
+    if (!supabase || !selectedTime || !name || !phone || !plate) return
 
     setLoading(true)
     
@@ -56,7 +62,7 @@ export default function BookingPage() {
       {
         customer_name: name,
         phone: phone,
-        service: 'Premium-rekond', // Default or from context
+        service: site.services[0].name,
         booking_date: selectedDate,
         booking_time: selectedTime,
         status: 'confirmed'

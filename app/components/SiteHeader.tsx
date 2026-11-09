@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Menu, Phone, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { site } from "@/content/site";
+import Logo from "@/components/Logo";
 
 function getPhoneHref() {
   if (site.phone.startsWith("[")) return "/#contact";
@@ -95,15 +96,12 @@ export default function SiteHeader() {
         }`}
       >
         <div className="mx-auto flex h-20 max-w-6xl items-center justify-between px-6">
-          <Link
-            href="/"
-            className="flex flex-col leading-none"
-            aria-label={site.brandName}
-            onClick={() => handleNavigation("/")}
-          >
-            <span className="text-xl font-bold tracking-[0.16em] text-gold">VARDEX</span>
-            <span className="mt-1 text-xs tracking-[0.12em] text-white">Bilservice</span>
-          </Link>
+          <span className="hidden sm:inline-flex" onClick={() => handleNavigation("/")}>
+            <Logo variant="full" theme="dark" className="h-12 w-auto" />
+          </span>
+          <span className="sm:hidden" onClick={() => handleNavigation("/")}>
+            <Logo variant="compact" theme="dark" className="h-11 w-11" />
+          </span>
 
           <nav aria-label="Huvudmeny" className="hidden items-center gap-6 lg:flex">
             {site.navigation.map(({ label, href }) => (
@@ -158,15 +156,9 @@ export default function SiteHeader() {
           aria-label="Navigationsmeny"
         >
           <div className="flex h-14 items-center justify-between">
-            <Link
-              href="/"
-              className="flex flex-col leading-none"
-              aria-label={site.brandName}
-              onClick={() => handleNavigation("/")}
-            >
-              <span className="text-xl font-bold tracking-[0.16em] text-gold">VARDEX</span>
-              <span className="mt-1 text-xs tracking-[0.12em] text-white">Bilservice</span>
-            </Link>
+            <span onClick={() => handleNavigation("/")}>
+              <Logo variant="compact" theme="dark" className="h-11 w-11" />
+            </span>
             <button
               type="button"
               className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/20 text-white hover:border-gold hover:text-gold-light"

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { site } from "@/content/site";
+import Logo from "@/components/Logo";
 
 const currentYear = new Date().getFullYear();
 
@@ -21,10 +22,7 @@ export default function SiteFooter() {
     <footer className="border-t border-gold/50 bg-background">
       <div className="mx-auto grid max-w-6xl gap-10 px-6 py-12 pb-28 sm:grid-cols-2 lg:grid-cols-4 lg:pb-12">
         <div>
-          <Link href="/" className="inline-flex flex-col leading-none" aria-label={site.brandName}>
-            <span className="text-xl font-bold tracking-[0.16em] text-gold">VARDEX</span>
-            <span className="mt-1 text-xs tracking-[0.12em] text-white">Bilservice</span>
-          </Link>
+          <Logo variant="full" theme="dark" className="h-12 w-auto" />
           <p className="mt-5 max-w-xs text-sm leading-6 text-muted">{site.description}</p>
         </div>
 

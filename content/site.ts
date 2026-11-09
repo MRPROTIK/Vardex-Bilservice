@@ -1,3 +1,49 @@
+const bookingPath = "/boka-tid";
+const bookingLabel = "Boka tid";
+type Service = {
+  name: string;
+  slug: string;
+  icon: "wrench" | "brakes" | "oil" | "diagnostics";
+  shortDescription: string;
+  description: string;
+  fromPrice?: number;
+};
+
+const services: readonly Service[] = [
+  {
+    name: "Bilservice",
+    slug: "bilservice",
+    icon: "wrench",
+    shortDescription: "Läs mer om bilservice och skicka en bokningsförfrågan.",
+    description:
+      "Skicka en förfrågan om bilservice. Beskriv bilens behov så återkommer vi om en tid.",
+  },
+  {
+    name: "Bromsservice",
+    slug: "bromsservice",
+    icon: "brakes",
+    shortDescription: "Skicka en förfrågan om bilens bromsar.",
+    description:
+      "Skicka en förfrågan om bromsservice och berätta vad du har märkt. Vi återkommer om en tid.",
+  },
+  {
+    name: "Oljebyte",
+    slug: "oljebyte",
+    icon: "oil",
+    shortDescription: "Läs mer om oljebyte och fråga om en tid.",
+    description:
+      "Skicka en förfrågan om oljebyte. Vi återkommer för att prata om en lämplig tid.",
+  },
+  {
+    name: "Felsökning",
+    slug: "felsokning",
+    icon: "diagnostics",
+    shortDescription: "Beskriv bilens symtom och skicka en förfrågan.",
+    description:
+      "Berätta vad du har märkt med bilen så kan vi gå igenom din förfrågan och återkomma om en tid.",
+  },
+] as const;
+
 export const site = {
   brandName: "Vardex Bilservice",
   description:
@@ -8,6 +54,9 @@ export const site = {
   city: "[ORT]",
   openingStatus: "Öppnar snart",
   openingHours: "[ÖPPETTIDER]",
+  bookingPath,
+  bookingLabel,
+  pricesIncludeVat: true,
   home: {
     heroDescription:
       "Behöver bilen service, bromsarbete, oljebyte eller felsökning? Skicka en förfrågan så återkommer vi om en tid.",
@@ -51,58 +100,37 @@ export const site = {
       },
     ],
   },
-  services: [
-    {
-      name: "Bilservice",
-      slug: "bilservice",
-      icon: "wrench",
-      shortDescription: "Läs mer om bilservice och skicka en bokningsförfrågan.",
-      description:
-        "Skicka en förfrågan om bilservice. Beskriv bilens behov så återkommer vi om en tid.",
-    },
-    {
-      name: "Bromsservice",
-      slug: "bromsservice",
-      icon: "brakes",
-      shortDescription: "Skicka en förfrågan om bilens bromsar.",
-      description:
-        "Skicka en förfrågan om bromsservice och berätta vad du har märkt. Vi återkommer om en tid.",
-    },
-    {
-      name: "Oljebyte",
-      slug: "oljebyte",
-      icon: "oil",
-      shortDescription: "Läs mer om oljebyte och fråga om en tid.",
-      description:
-        "Skicka en förfrågan om oljebyte. Vi återkommer för att prata om en lämplig tid.",
-    },
-    {
-      name: "Felsökning",
-      slug: "felsokning",
-      icon: "diagnostics",
-      shortDescription: "Beskriv bilens symtom och skicka en förfrågan.",
-      description:
-        "Berätta vad du har märkt med bilen så kan vi gå igenom din förfrågan och återkomma om en tid.",
-    },
+  aboutText: [
+    "Vardex Bilservice erbjuder bilservice, bromsservice, oljebyte och felsökning.",
+    "Du kan skicka en bokningsförfrågan med information om bilen och vad du behöver hjälp med. En tid är inte bokad förrän Vardex Bilservice har svarat och bekräftat den.",
   ],
+  ownerMechanic: {
+    name: "[NAMN]",
+    role: "[ÄGARE/MEKANIKER]",
+    experience: "[ERFARENHET]",
+  },
+  services,
   navigation: [
     { label: "Startsida", href: "/" },
-    { label: "Tjänster", href: "/#services" },
-    { label: "Priser", href: "/#pricing" },
-    { label: "Om oss", href: "/#about" },
-    { label: "Bilguider", href: "/#guides" },
-    { label: "Kontakt", href: "/#contact" },
+    { label: "Tjänster", href: "/tjanster" },
+    { label: "Priser", href: "/priser" },
+    { label: "Om oss", href: "/om-oss" },
+    { label: "Bilguider", href: "/bilguider" },
+    { label: "Kontakt", href: "/kontakt" },
+    { label: bookingLabel, href: bookingPath },
   ],
   footerLinks: [
     { label: "Startsida", href: "/" },
-    ...[
-      { label: "Bilservice", href: "/tjanster/bilservice" },
-      { label: "Bromsservice", href: "/tjanster/bromsservice" },
-      { label: "Oljebyte", href: "/tjanster/oljebyte" },
-      { label: "Felsökning", href: "/tjanster/felsokning" },
-    ],
-    { label: "Boka tid", href: "/boka" },
-    { label: "Kontakt", href: "/#contact" },
+    { label: "Tjänster", href: "/tjanster" },
+    ...services.map(({ name, slug }) => ({
+      label: name,
+      href: `/tjanster/${slug}`,
+    })),
+    { label: bookingLabel, href: bookingPath },
+    { label: "Om oss", href: "/om-oss" },
+    { label: "Bilguider", href: "/bilguider" },
+    { label: "Priser", href: "/priser" },
+    { label: "Kontakt", href: "/kontakt" },
     { label: "Integritetspolicy", href: "/integritetspolicy" },
   ],
   settings: {

@@ -23,8 +23,8 @@ export async function generateMetadata({ params }: ServicePageProps): Promise<Me
   if (!service) return { title: site.brandName };
 
   return {
-    title: `${service.name} – ${site.brandName}`,
-    description: service.description,
+    title: `${service.name} i ${site.city} – ${site.brandName}`,
+    description: `${service.description} ${site.city}.`,
     robots: {
       index: site.settings.ALLOW_INDEXING,
       follow: site.settings.ALLOW_INDEXING,
@@ -59,8 +59,8 @@ export default async function ServicePage({ params }: ServicePageProps) {
           <p className="mt-5 max-w-2xl leading-7 text-muted">
             {site.home.bookingNote}
           </p>
-          <Link href="/boka" className="btn-gold mt-8">
-            Begär en bokning
+          <Link href={site.bookingPath} className="btn-gold mt-8">
+            {site.bookingLabel}
             <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </Link>
         </section>

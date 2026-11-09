@@ -73,8 +73,8 @@ export default function Home() {
               {site.home.heroDescription}
             </p>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-              <Link href="/boka" className="btn-gold">
-                Begär en bokning
+              <Link href={site.bookingPath} className="btn-gold">
+                {site.bookingLabel}
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
               <a href={getPhoneHref()} className="btn-outline">
@@ -241,8 +241,8 @@ export default function Home() {
               </dl>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
-              <Link href="/boka" className="btn-gold">
-                Begär en bokning
+              <Link href={site.bookingPath} className="btn-gold">
+                {site.bookingLabel}
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
               <a href={getPhoneHref()} className="btn-outline">

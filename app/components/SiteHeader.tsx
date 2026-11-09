@@ -120,8 +120,8 @@ export default function SiteHeader() {
           </nav>
 
           <div className="hidden items-center gap-5 lg:flex">
-            <Link href="/boka" className="btn-gold">
-              Boka tid
+            <Link href={site.bookingPath} className="btn-gold">
+              {site.bookingLabel}
             </Link>
             <a href={phoneHref} className="inline-flex items-center gap-2 text-sm text-white hover:text-gold-light">
               <Phone className="h-4 w-4 text-gold" aria-hidden="true" />
@@ -189,8 +189,8 @@ export default function SiteHeader() {
           </nav>
 
           <div className="flex flex-col gap-4">
-            <Link href="/boka" className="btn-gold w-full" onClick={() => setMenuOpen(false)}>
-              Boka tid
+            <Link href={site.bookingPath} className="btn-gold w-full" onClick={() => setMenuOpen(false)}>
+              {site.bookingLabel}
             </Link>
             <a href={phoneHref} className="btn-outline w-full">
               <Phone className="h-4 w-4" aria-hidden="true" />

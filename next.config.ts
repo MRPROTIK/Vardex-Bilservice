@@ -1,9 +1,18 @@
 import type { NextConfig } from "next";
+import { site } from "./content/site";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   cacheComponents: true,
   partialPrefetching: true,
+  async redirects() {
+    return [
+      {
+        source: "/boka",
+        destination: site.bookingPath,
+        permanent: true,
+      },
+    ];
+  },
   turbopack: {
     rules: {
       "*.css": {

@@ -85,8 +85,8 @@ export default function BookingPage() {
              <div className="absolute inset-0 bg-emerald-500/20 blur-3xl rounded-full" />
              <CheckCircle2 className="w-24 h-24 text-emerald-500 relative z-10 animate-in zoom-in duration-500" />
           </div>
-          <h1 className="text-3xl font-bold mb-4">Bokning Bekräftad!</h1>
-          <p className="text-zinc-400 mb-8">Vi har skickat en bekräftelse till ditt telefonnummer. Välkommen till oss!</p>
+          <h1 className="text-3xl font-bold mb-4">Förfrågan registrerad</h1>
+          <p className="text-zinc-400 mb-8">Tack för din förfrågan. Vi återkommer för att bekräfta en tid.</p>
           <Link href="/" className="inline-flex items-center gap-2 text-zinc-500 hover:text-white transition-colors">
             <ArrowLeft className="w-4 h-4" /> Tillbaka till start
           </Link>
@@ -187,12 +187,31 @@ export default function BookingPage() {
             </div>
           </div>
 
+          <div className="flex items-start gap-3">
+            <input
+              id="privacy-policy"
+              type="checkbox"
+              required
+              className="mt-1 h-4 w-4 accent-[#C9A24B]"
+            />
+            <label htmlFor="privacy-policy" className="text-sm leading-6 text-zinc-300">
+              Jag har tagit del av{" "}
+              <Link
+                href="/integritetspolicy"
+                className="text-[#E3C77A] underline underline-offset-4 hover:text-white"
+              >
+                integritetspolicyn
+              </Link>
+              .
+            </label>
+          </div>
+
           <button 
             type="submit"
             disabled={!selectedTime || loading}
             className="w-full bg-white text-black font-bold py-5 rounded-2xl hover:bg-zinc-200 transition-all disabled:opacity-20 flex items-center justify-center gap-2 group"
           >
-            {loading ? 'Bokar...' : 'Boka Behandling'} 
+            {loading ? 'Skickar...' : site.bookingLabel}
             <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </button>
         </form>
